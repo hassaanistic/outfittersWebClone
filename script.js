@@ -1,5 +1,80 @@
+
+const dataObject = {
+    menObj: {
+        id: 1,
+        sections: [
+            "./images/jpgs/men-FirstSection.jpg",
+            "./images/jpgs/men-SecondSection.jpg",
+            "./images/jpgs/men-ThirdSection.jpg",
+        ],
+        buttons: {
+            sectionOneButtons: [
+                { name: "Button1", url: "https://example.com/emoji1.png" },
+                { name: "Button2", url: "https://example.com/emoji2.png" },
+                { name: "Button3", url: "https://example.com/emoji3.png" },
+                { name: "Button4", url: "https://example.com/emoji4.png" },
+                { name: "Button5", url: "https://example.com/emoji5.png" },
+                { name: "Button6", url: "https://example.com/emoji6.png" },
+                { name: "Button7", url: "https://example.com/emoji7.png" },
+            ],
+        },
+    },
+    womenObj: {
+        id: 2,
+        sections: [
+            "./images/jpgs/women-FirstSection.jpg",
+            "./images/jpgs/women-SecondSection.jpg",
+            "./images/jpgs/women-ThirdSection.jpg",
+        ],
+        buttons: {
+            sectionOneButtons: [
+                { name: "Button1", url: "https://example.com/emoji1.png" },
+                { name: "Button2", url: "https://example.com/emoji2.png" },
+                { name: "Button3", url: "https://example.com/emoji3.png" },
+                { name: "Button4", url: "https://example.com/emoji4.png" },
+                { name: "Button5", url: "https://example.com/emoji5.png" },
+                { name: "Button6", url: "https://example.com/emoji6.png" },
+                { name: "Button7", url: "https://example.com/emoji7.png" },
+            ],
+        },
+    },
+    juniorsObj: {
+        id: 3,
+        sections: [
+            "./images/jpgs/juniors-FirstSection.jpg",
+            "./images/jpgs/juniors-SecondSection.jpg",
+            "./images/jpgs/juniors-ThirdSection.jpg",
+        ],
+        buttons: {
+            sectionOneButtons: [
+                { name: "Button1", url: "https://example.com/emoji1.png" },
+                { name: "Button2", url: "https://example.com/emoji2.png" },
+                { name: "Button3", url: "https://example.com/emoji3.png" },
+                { name: "Button4", url: "https://example.com/emoji4.png" },
+                { name: "Button5", url: "https://example.com/emoji5.png" },
+                { name: "Button6", url: "https://example.com/emoji6.png" },
+                { name: "Button7", url: "https://example.com/emoji7.png" },
+            ],
+            sectionTwoButtons: [
+                { name: "Button8", url: "https://example.com/emoji8.png" },
+                { name: "Button9", url: "https://example.com/emoji9.png" },
+                { name: "Button10", url: "https://example.com/emoji10.png" },
+                { name: "Button1", url: "https://example.com/emoji10.png" },
+                { name: "Button10", url: "https://example.com/emoji10.png" },
+                { name: "Button10", url: "https://example.com/emoji10.png" },
+            ],
+        },
+    },
+};
+
+// You can now use the dataObject as needed in your JavaScript code.
+
+
 const container = document.querySelector(".container");
 var section = null;
+var currentPage = "women"; //we are using this in appendButtons functionn so we make it Global
+// const objects = require('./Data.json');
+// console.log(objects)
 
 container.addEventListener("scroll", event => {
     const scrollTop = container.scrollTop;
@@ -13,9 +88,62 @@ container.addEventListener("scroll", event => {
         section = "footer";
     }
 
+
+    //adding text in the sectionForResponsiveStickyNav
+    const sectionForResponsiveStickyNav = document.getElementById("sectionForResponsiveStickyNav");
+    if (currentPage === "women") {
+        switch (section) {
+            case "first":
+                sectionForResponsiveStickyNav.innerHTML = "Women"
+                break;
+            case "second":
+                sectionForResponsiveStickyNav.innerHTML = "OuterWears"
+                break;
+            case "third":
+                sectionForResponsiveStickyNav.innerHTML = "Bottoms"
+                break;
+            case "footer":
+                sectionForResponsiveStickyNav.innerHTML = ""
+                break;
+            default:
+                break;
+        }
+    } else if (currentPage === "men") {
+        switch (section) {
+            case "first":
+                sectionForResponsiveStickyNav.innerText = "Men"
+                break;
+            case "second":
+                sectionForResponsiveStickyNav.innerText = "OuterWears"
+                break;
+            case "third":
+                sectionForResponsiveStickyNav.innerText = "Bottoms"
+                break;
+            case "footer":
+                sectionForResponsiveStickyNav.innerHTML = ""
+            default:
+                break;
+        }
+    } else if (currentPage === "juniors") {
+        switch (section) {
+            case "first":
+                sectionForResponsiveStickyNav.innerText = "Juniors"
+                break;
+            case "second":
+                sectionForResponsiveStickyNav.innerText = "Boys-Winter-Sale"
+                break;
+            case "third":
+                sectionForResponsiveStickyNav.innerText = "Girls-Winter-Sale"
+                break;
+            case "footer":
+                sectionForResponsiveStickyNav.innerHTML = ""
+            default:
+                break;
+        }
+    }
+
     // console.log(container.scrollTop)
     // console.log(section);
-
     //if we dont call this all the time then once the elements get display nne they will never come back 
     toggleVisibility(section);
 
@@ -135,12 +263,12 @@ function updateSideUrl(sectionId) {
 
 
 //GET CURRENT PAGE DATA AND RENDER IN THE HTML 
-var currentPage = "women"; //we are using this in appendButtons functionn so we make it Global
 document.querySelectorAll('.leftRightNavs').forEach(function (element) {
     element.addEventListener('click', async function () {
         currentPage = await element.innerText.toLowerCase();
         console.log('Current Page is:', currentPage);
-
+        //in making "sectionForResponsiveStickyNav" responsive
+        document.getElementById("sectionForResponsiveStickyNav").innerHTML = element.innerText;
         fetchData(`${currentPage}Obj`);
         //Reload and move to the top 
         container.scrollTo({
@@ -173,42 +301,29 @@ document.querySelectorAll('.leftRightNavs').forEach(function (element) {
 
     });
 });
-
-
 const fetchData = (objectType) => {
     try {
-        fetch("Data.json")
-            .then((response) => response.json())
-            .then((data) => {
-                const obj = data[objectType];
+        const obj = dataObject[objectType];
 
-                if (obj) {
-                    const sections = obj.sections;
-                    document.getElementById("first").style.backgroundImage =
-                        `url(${sections[0]})`;
-                    document.getElementById("second").style.backgroundImage =
-                        `url(${sections[1]})`;
-                    document.getElementById("third").style.backgroundImage =
-                        `url(${sections[2]})`;
+        if (obj) {
+            const sections = obj.sections;
+            document.getElementById("first").style.backgroundImage = `url(${sections[0]})`;
+            document.getElementById("second").style.backgroundImage = `url(${sections[1]})`;
+            document.getElementById("third").style.backgroundImage = `url(${sections[2]})`;
 
-
-                    // Check if the object has buttons
-                    if (obj.buttons && obj.buttons.sectionOneButtons && obj.buttons.sectionTwoButtons) {
-                        appendButtons(obj.buttons.sectionOneButtons, obj.buttons.sectionTwoButtons);
-                    } else if (obj.buttons && obj.buttons.sectionOneButtons) {
-                        appendButtons(obj.buttons.sectionOneButtons);
-                    }
-                    else {
-                        clearButtons();
-                    }
-
-                } else {
-                    console.error("Object type not found in data:", objectType);
-                }
-            })
-            .catch((error) => console.error("Error fetching JSON:", error));
+            // Check if the object has buttons
+            if (obj.buttons && obj.buttons.sectionOneButtons && obj.buttons.sectionTwoButtons) {
+                appendButtons(obj.buttons.sectionOneButtons, obj.buttons.sectionTwoButtons);
+            } else if (obj.buttons && obj.buttons.sectionOneButtons) {
+                appendButtons(obj.buttons.sectionOneButtons);
+            } else {
+                clearButtons();
+            }
+        } else {
+            console.error("Object type not found in dataObject:", objectType);
+        }
     } catch (error) {
-        console.log(error.message);
+        console.error("Error fetching data:", error);
     }
 };
 
@@ -290,4 +405,5 @@ function clearButtons() {
 
 document.addEventListener("DOMContentLoaded", function () {
     fetchData("womenObj");
+
 });
